@@ -1,0 +1,53 @@
+.user-photos-wrap {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.photo-card {
+	border-bottom: 1px solid #e3e6eb;
+	padding-bottom: 16px;
+}
+
+.photo-card:last-child {
+	border-bottom: 0;
+}
+
+.photo-image {
+	max-width: 100%;
+	height: auto;
+	border-radius: 6px;
+}
+
+.photo-date {
+	margin: 8px 0;
+}
+
+.photo-comments-title {
+	margin: 10px 0 6px;
+	font-size: 1.05rem;
+}
+
+.photo-comments-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.photo-comment-item {
+	padding: 8px 0;
+	border-bottom: 1px dashed #e3e6eb;
+}
+
+.photo-comment-item:last-child {
+	border-bottom: 0;
+}
+
+.photo-comment-content p {
+	margin: 4px 0;
+}
+
+.photo-comment-user {
+	font-weight: 600;
+	text-decoration: none;
+}

@@ -1,5 +1,4 @@
 import React from "react";
-import { AppBar, Toolbar, Typography, Box } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import models from "../../modelData/models";
 import "./styles.css";
@@ -28,18 +27,17 @@ function TopBar() {
 
 
   return (
-    <AppBar className="topbar-appBar" position="absolute">
-      <Toolbar>
-      
-        <Typography variant="h5" color="inherit" sx={{ flexGrow: 1 }}>
+    <header className="topbar-appBar">
+      <div className="topbar-toolbar">
+        <h1 className="topbar-title">
           Thân Văn Sỹ - B23DCKH101
-        </Typography>
+        </h1>
 
-        <Typography variant="h5" color="inherit">
+        <p className="topbar-context">
           {getContextText()}
-        </Typography>
-      </Toolbar>
-    </AppBar>
+        </p>
+      </div>
+    </header>
   );
 }
 

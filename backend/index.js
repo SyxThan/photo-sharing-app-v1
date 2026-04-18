@@ -1,29 +1,22 @@
-import models from "../src/modelData/models.js";
-import express from "express";
-import cors from "cors";
+const express = require("express");
 const app = express();
-const port = 5000;
+const cors = require("cors");
+const dbConnect = require("./db/dbConnect");
+const UserRouter = require("./routes/UserRouter");
+const PhotoRouter = require("./routes/PhotoRouter");
+const CommentRouter = require("./routes/CommentRouter");
+
+dbConnect();
+
 app.use(cors());
 app.use(express.json());
+app.use("/api/user", UserRouter);
+app.use("/api/photo", PhotoRouter);
 
-app.get("/test/info", (req, res) => {
-    return res.json("This URL is useful for testing your model fetching method.")
+app.get("/", (request, response) => {
+  response.send({ message: "Hello from photo-sharing app API!" });
 });
 
-app.get("/user/list", (req, res) => {
-    return res.json(models.userListModel());
-})
-
-app.get("/user/:id", (req, res) => {
-    const userId = req.params.id;
-    return res.json(models.userModel(userId));
-});
-
-app.get("/photos/:id", (req, res) => {
-    const photoId = req.params.id;
-    return res.json(models.photoOfUserModel(photoId));
-});
-
-app.listen(port, () => {
-    console.log(`Server chạy ở cổng ${port}`);
+app.listen(8081, () => {
+  console.log("server listening on port 8081");
 });

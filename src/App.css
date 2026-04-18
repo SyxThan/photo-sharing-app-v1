@@ -1,8 +1,50 @@
+.app-root {
+  min-height: 100vh;
+}
+
+.app-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  column-gap: 16px;
+  row-gap: 0;
+  padding: 0 16px 16px;
+}
+
+.app-topbar {
+  grid-column: 1 / -1;
+}
+
 .main-topbar-buffer {
   margin-top: 70px;
+}
+
+.app-sidebar-column {
+  grid-column: 1;
+}
+
+.app-content-column {
+  grid-column: 1;
 }
 
 .main-grid-item {
   height: calc(100vh - 85px);
   padding: 10px;
+  border: 1px solid #d8dde6;
+  border-radius: 6px;
+  background-color: #fff;
+  overflow: auto;
+}
+
+@media (min-width: 768px) {
+  .app-layout {
+    grid-template-columns: 1fr 3fr;
+  }
+
+  .app-sidebar-column {
+    grid-column: 1;
+  }
+
+  .app-content-column {
+    grid-column: 2;
+  }
 }
