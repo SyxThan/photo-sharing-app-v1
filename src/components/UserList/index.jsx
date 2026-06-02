@@ -2,14 +2,16 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./styles.css";
 
-/**
- * Define UserList, a React component of Project 4.
- */
 function UserList() {
   const [users, setUsers] = useState([]);
   const fetchData = async () => {
     try {
-      const response = await fetch("http://localhost:8081/api/user");
+      const token = localStorage.getItem("token");
+      const response = await fetch("http://localhost:8081/api/user", {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
       if (!response.ok) {
         throw new Error("Khong the tai danh sach nguoi dung");
       }

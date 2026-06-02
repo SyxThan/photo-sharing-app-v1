@@ -344,7 +344,7 @@ const comments = [
 comments.forEach(function (comment) {
   const photo = photos.filter(function (photo) {
     return photo._id === comment.photo_id;
-  })[0]; // Only one match. Return the content of the match inside the array
+  })[0];
 
   if (!photo.comments) {
     photo.comments = [];

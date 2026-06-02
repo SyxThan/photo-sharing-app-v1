@@ -6,13 +6,13 @@ router.post("/:photoId", async (request, response) => {
   try {
     const photo = await Photo.findById(request.params.photoId);
     if (!photo) {
-      return response.status(404).json({ error: "Photo not found" });
+      return response.status(404).json({error: "Photo not found"});
     }
 
     photo.comments.push({
       comment: request.body.comment,
-      date_time: request.body.date_time,
-      user_id: request.body.user_id,
+      date_time: new Date(),
+      user_id: request.userId,
     });
 
     const updatedPhoto = await photo.save();

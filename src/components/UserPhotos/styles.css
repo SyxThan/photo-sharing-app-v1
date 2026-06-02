@@ -32,22 +32,7 @@
 	list-style: none;
 	margin: 0;
 	padding: 0;
+	margin-bottom: 1rem;
 }
 
-.photo-comment-item {
-	padding: 8px 0;
-	border-bottom: 1px dashed #e3e6eb;
-}
 
-.photo-comment-item:last-child {
-	border-bottom: 0;
-}
-
-.photo-comment-content p {
-	margin: 4px 0;
-}
-
-.photo-comment-user {
-	font-weight: 600;
-	text-decoration: none;
-}

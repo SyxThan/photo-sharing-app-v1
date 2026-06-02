@@ -25,9 +25,60 @@
   margin: 0;
   font-size: 1.25rem;
   font-weight: 600;
+  flex: 0 0 auto;
 }
 
 .topbar-context {
   margin: 0;
   font-size: 1rem;
+  flex: 1;
+  text-align: center;
+}
+
+.topbar-user-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 0 0 auto;
+}
+
+.topbar-greeting {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.topbar-login-prompt {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.topbar-add-photo-btn {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 0.95rem;
+}
+
+.topbar-add-photo-btn:hover {
+  background-color: #45a049;
+}
+
+.topbar-logout-btn {
+  background-color: #fff;
+  color: #1976d2;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.topbar-logout-btn:hover {
+  background-color: #f0f0f0;
 }

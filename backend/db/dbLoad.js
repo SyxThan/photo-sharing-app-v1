@@ -27,6 +27,8 @@ async function dbLoad() {
   const mapFakeId2RealId = {};
   for (const user of userModels) {
     const userObj = new User({
+      login_name: user.last_name.toLowerCase(),
+      password: "password123",
       first_name: user.first_name,
       last_name: user.last_name,
       location: user.location,
@@ -42,6 +44,8 @@ async function dbLoad() {
         user.first_name + " " + user.last_name,
         " with ID ",
         user.objectID,
+        " and login_name: ",
+        userObj.login_name,
       );
     } catch (error) {
       console.error("Error create user", error);
