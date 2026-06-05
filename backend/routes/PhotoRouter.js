@@ -109,6 +109,7 @@ router.post("/commentsOfPhoto/:photoId", async (req, res) => {
         });
 
         await photo.save();
+        await photo.populate("comments.user_id");
         res.json(photo);
 
     } catch (err) {
@@ -136,6 +137,66 @@ router.get("/:id", async (req, res) => {
         });
     }
 });
+
+
+router.delete("/:photoId/comment/:commentId", async (req, res) => {
+    try {
+        const photo = await Photo.findById(req.params.photoId);
+        if (!photo) return res.status(404).json({ error: "Không tìm thấy ảnh" });
+        const comment = photo.comments.id(req.params.commentId);
+        if (!comment) return res.status(404).json({ error: "Không tìm thấy bình luận" });
+        
+        if (comment.user_id.toString() !== req.userId) {
+            return res.status(403).json({ error: "Bạn không có quyền xóa" });
+        }
+        photo.comments.pull(req.params.commentId);
+        await photo.save();
+        await photo.populate("comments.user_id");
+        res.json(photo);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+router.put("/:photoId/comment/:commentId", async (req, res) => {
+    try {
+        const photo = await Photo.findById(req.params.photoId);
+        if (!photo) return res.status(404).json({ error: "Không tìm thấy ảnh" });
+        const comment = photo.comments.id(req.params.commentId);
+        if (!comment) return res.status(404).json({ error: "Không tìm thấy bình luận" });
+        
+        if (comment.user_id.toString() !== req.userId) {
+            return res.status(403).json({ error: "Bạn không có quyền sửa" });
+        }
+        
+        comment.comment = req.body.comment;
+        await photo.save();
+        await photo.populate("comments.user_id");
+        res.json(photo);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+router.post("/:photoId/like", async (req, res) => {
+    try {
+        const photo = await Photo.findById(req.params.photoId);
+        if (!photo) return res.status(404).json({ error: "Không tìm thấy ảnh" });
+        
+        const index = photo.likes.indexOf(req.userId);
+        if (index === -1) {
+            photo.likes.push(req.userId);
+        } else {
+            photo.likes.splice(index, 1);
+        }
+        
+        await photo.save();
+        await photo.populate("comments.user_id");
+        res.json(photo);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 
 
 module.exports = router;

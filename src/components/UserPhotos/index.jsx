@@ -21,11 +21,14 @@ function UserPhotos() {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await fetch(`http://localhost:8081/api/photo/user/${userId}`, {
-          headers: {
-            "Authorization": `Bearer ${token}`
+        const response = await fetch(
+          `http://localhost:8081/api/photo/user/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
-        });
+        );
         if (!response.ok) {
           throw new Error("Khong the tai danh sach anh");
         }
@@ -45,11 +48,14 @@ function UserPhotos() {
       const fetchData = async () => {
         try {
           const token = localStorage.getItem("token");
-          const response = await fetch(`http://localhost:8081/api/photo/user/${userId}`, {
-            headers: {
-              "Authorization": `Bearer ${token}`
+          const response = await fetch(
+            `http://localhost:8081/api/photo/user/${userId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
             }
-          });
+          );
           if (!response.ok) {
             throw new Error("Khong the tai danh sach anh");
           }
@@ -68,37 +74,29 @@ function UserPhotos() {
     };
   }, [userId]);
 
-  const handleCommentAdded = (updatedPhoto) => {
-    const loggedInUser = JSON.parse(
-      localStorage.getItem("loggedInUser")
-    );
-
+  const handlePhotoUpdated = (updatedPhoto) => {
     setPhotos((prevPhotos) =>
-      prevPhotos.map((photo) => {
-        if (photo._id === updatedPhoto._id) {
-          // Khôi phục lại thông tin user cho từng comment
-          updatedPhoto.comments?.forEach((newComment, index) => {
-            const oldComment = photo.comments?.find(c => c._id === newComment._id);
-            
-            // Nếu comment đã tồn tại trước đó, lấy lại thông tin user đã có đầy đủ first_name, last_name
-            if (oldComment && oldComment.user_id && typeof oldComment.user_id !== "string") {
-              newComment.user_id = oldComment.user_id;
-            } 
-            // Nếu là comment mới (chưa có trong danh sách cũ), gán thông tin user đang đăng nhập
-            else if (typeof newComment.user_id === "string" || !newComment.user_id?.first_name) {
-              newComment.user_id = {
-                _id: loggedInUser._id,
-                first_name: loggedInUser.first_name,
-                last_name: loggedInUser.last_name,
-              };
-            }
-          });
-
-          return updatedPhoto;
-        }
-        return photo;
-      })
+      prevPhotos.map((photo) =>
+        photo._id === updatedPhoto._id ? updatedPhoto : photo
+      )
     );
+  };
+
+  const handleLike = async (photoId) => {
+    try {
+      const res = await fetch(`http://localhost:8081/api/photo/${photoId}/like`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      if (res.ok) {
+        const updatedPhoto = await res.json();
+        handlePhotoUpdated(updatedPhoto);
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   if (!photos) {
@@ -116,16 +114,37 @@ function UserPhotos() {
           />
           <p className="photo-date">Ngày đăng: {photo.date_time}</p>
 
+          <div style={{ margin: "10px 0" }}>
+            <span style={{ marginRight: "10px" }}>
+              {photo.likes ? photo.likes.length : 0} lượt thích
+            </span>
+            {loggedInUserId && (
+              <button onClick={() => handleLike(photo._id)}>
+                {(photo.likes && photo.likes.includes(loggedInUserId)) ? "Bỏ thích" : "Thích"}
+              </button>
+            )}
+          </div>
+
           <h3 className="photo-comments-title">Bình luận:</h3>
 
           <ul className="photo-comments-list">
-            {photo.comments && photo.comments.map((com) => (
-              <UserComment key={com._id} comment={com} />
-            ))}
+            {photo.comments &&
+              photo.comments.map((com) => (
+                <UserComment
+                  key={com._id}
+                  comment={com}
+                  photoId={photo._id}
+                  loggedInUserId={loggedInUserId}
+                  onPhotoUpdated={handlePhotoUpdated}
+                />
+              ))}
           </ul>
 
           {loggedInUserId && (
-            <AddComment photoId={photo._id} onCommentAdded={handleCommentAdded} />
+            <AddComment
+              photoId={photo._id}
+              onCommentAdded={handlePhotoUpdated}
+            />
           )}
         </article>
       ))}

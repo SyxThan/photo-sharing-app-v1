@@ -32,4 +32,53 @@ router.get("/:id", async (request, response) => {
 	}
 });
 
+router.get("/:id/stats", async (request, response) => {
+	try {
+		const userId = request.params.id;
+		const Photo = require("../db/photoModel");
+		const photoCount = await Photo.countDocuments({ user_id: userId });
+		
+		const photos = await Photo.find();
+		let commentCount = 0;
+		photos.forEach(photo => {
+			if (photo.comments) {
+				photo.comments.forEach(c => {
+					if (c.user_id && c.user_id.toString() === userId) {
+						commentCount++;
+					}
+				});
+			}
+		});
+		return response.json({ photoCount, commentCount });
+	} catch (error) {
+		return response.status(500).json({ error: error.message });
+	}
+});
+
+router.get("/:id/comments", async (request, response) => {
+	try {
+		const userId = request.params.id;
+		const Photo = require("../db/photoModel");
+		const photos = await Photo.find().populate("comments.user_id");
+		let userComments = [];
+		
+		photos.forEach(photo => {
+			if (photo.comments) {
+				photo.comments.forEach(c => {
+					if (c.user_id && (c.user_id._id.toString() === userId || c.user_id.toString() === userId)) {
+						userComments.push({
+							photo: { _id: photo._id, file_name: photo.file_name, user_id: photo.user_id },
+							comment: c.comment,
+							date_time: c.date_time
+						});
+					}
+				});
+			}
+		});
+		return response.json(userComments);
+	} catch (error) {
+		return response.status(500).json({ error: error.message });
+	}
+});
+
 module.exports = router;

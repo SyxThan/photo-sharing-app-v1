@@ -35,4 +35,19 @@ router.get("/:photoId", async (request, response) => {
   }
 });
 
+router.delete("/:photoId/:commentId", async (request, response) => {
+  try {
+    const photo = await Photo.findById(request.params.photoId);
+    if (!photo) return response.status(404).json({ error: "Photo not found" });
+
+    const comment = photo.comments.id(request.params.commentId);
+    comment.deleteOne();
+
+    await photo.save();
+    response.json(photo)
+  } catch {
+    return response.status(400).json();
+  }
+});
+
 module.exports = router;

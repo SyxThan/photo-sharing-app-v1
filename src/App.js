@@ -6,6 +6,7 @@ import TopBar from "./components/TopBar";
 import UserList from "./components/UserList";
 import UserDetail from "./components/UserDetail";
 import UserPhotos from "./components/UserPhotos";
+import UserComments from "./components/UserComments";
 import LoginRegister from "./components/LoginRegister";
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -78,6 +79,16 @@ function App() {
                       <ProtectedRoute
                         loggedInUser={loggedInUser}
                         element={<UserPhotos />}
+                      />
+                    }
+                  />
+
+                  <Route
+                    path="/comments/:userId"
+                    element={
+                      <ProtectedRoute
+                        loggedInUser={loggedInUser}
+                        element={<UserComments />}
                       />
                     }
                   />
